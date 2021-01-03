@@ -1,7 +1,5 @@
-## NodeJS-Login
-Simple NodeJS authentication using Express and MySql.
-
-For this tutorial we'll be doing something a little different, instead of developing applications with PHP we'll be creating a login system with Node.js, Express, and MySQL.
+## NodeJS Login, Express, and Session
+Simple NodeJS authentication example using Express and MySql.
 
 ## What you will be doing
 * Establishing a connection to a MySQL database and selecting rows using MySQL queries.
@@ -21,12 +19,12 @@ For this tutorial we'll be doing something a little different, instead of develo
 
 * Express Sessions - Install with command: npm install express-session.
 
-*MySQL for Node.js - Install with command: npm install mysql.
+* MySQL for Node.js - Install with command: npm install mysql.
 
 
 ## File Structure
 ```
-\-- nodelogin
+\-- credentials
   |-- login.html
   |-- login.js
 ```
@@ -34,8 +32,8 @@ For this tutorial we'll be doing something a little different, instead of develo
 ## Get started
 In order to create our first database table and insert test account to run the application paste the following to your Mysql workbench or terminal.
 ```
-CREATE DATABASE IF NOT EXISTS `nodelogin` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `nodelogin`;
+CREATE DATABASE IF NOT EXISTS `credentials` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `credentials`;
 
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(11) NOT NULL,

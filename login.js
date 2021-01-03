@@ -4,11 +4,12 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 
+// Change this depend on your db
 var connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
-	password : '',
-	database : 'nodelogin'
+	password : 'toor',
+	database : 'credentials'
 });
 
 var app = express();
