@@ -47,3 +47,21 @@ INSERT INTO `accounts` (`id`, `username`, `password`, `email`) VALUES (1, 'test'
 ALTER TABLE `accounts` ADD PRIMARY KEY (`id`);
 ALTER TABLE `accounts` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 ```
+
+Now you can use this command to run the application
+```node login.js```
+
+## In case of errors with database
+Can't make connection? Most common error can related to the db connection. Use the following query to fix it.
+
+```ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'toor';```
+
+Where root as your user localhost as your URL and 'toor' as your password
+   
+Then run this query to refresh privileges.
+
+```flush privileges;```
+   
+Try connecting using node after you do so.
+   
+If that doesn't work, try it without @'localhost' part.
