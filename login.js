@@ -24,6 +24,9 @@ app.use(bodyParser.json());
 app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/login.html'));
 });
+app.get('/signup.html', function(request, response) {
+	response.sendFile(path.join(__dirname + '/signup.html'));
+});
 
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
@@ -43,11 +46,24 @@ app.post('/auth', function(request, response) {
 		response.send('Please enter Username and Password!');
 		response.end();
 	}
+})
+
+app.post('/signup', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	var email = request.body.email;
+	connection.query('SELECT * FROM accounts WHERE username = ? AND email = ?', [username, email], function(error, results, fields) {
+        if (results.length > 0) {
+            response.send('Username or email already exist!');
+        } else {
+            response.send('Username or email not exist!');
+        }
+	})
 });
 
 app.get('/home', function(request, response) {
 	if (request.session.loggedin) {
-		response.send('Welcome back, ' + request.session.username + '!');
+		response.send('Welcome back again, ' + request.session.username + '!');
 	} else {
 		response.send('Please login to view this page!');
 	}
