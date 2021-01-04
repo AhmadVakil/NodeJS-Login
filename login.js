@@ -21,12 +21,8 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
-app.get('/', function(request, response) {
-	response.sendFile(path.join(__dirname + '/login.html'));
-});
-app.get('/signup.html', function(request, response) {
-	response.sendFile(path.join(__dirname + '/signup.html'));
-});
+// Serve public to client & keep server files secure
+app.use(express.static("public"));
 
 app.post('/auth', function(request, response) {
 	var username = request.body.username;
