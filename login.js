@@ -18,6 +18,7 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 
@@ -48,11 +49,16 @@ app.post('/signup', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
 	var email = request.body.email;
-	connection.query('SELECT * FROM accounts WHERE username = ? AND email = ?', [username, email], function(error, results, fields) {
+	connection.query('SELECT * FROM accounts WHERE username = ?', [username], function(error, results, fields) {
         if (results.length > 0) {
-            response.send('Username or email already exist!');
+            response.send('Username already exist!');
         } else {
-            response.send('Username or email not exist!');
+              console.log("Connected!");
+              var sql = 'INSERT INTO accounts (username, password, email) VALUES ('+mysql.escape(username)+', '+mysql.escape(password)+', '+mysql.escape(email)+')';
+              connection.query(sql, function (err, result) {
+                console.log("Number of records inserted: " + result.affectedRows);
+                response.send('Account created');
+              });
         }
 	})
 });

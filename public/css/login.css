@@ -31,3 +31,8 @@
 #span{
     text-align: center;
 }
+
+#button{
+    background-color:blue;
+    border-radius: 10px;
+}
