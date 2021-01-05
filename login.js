@@ -3,20 +3,23 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
-
+var io  = require('socket.io').listen(5001)
+io.sockets.on('connection', function(socket){
+    console.log("Connected")
+})
 // Change this depend on your db
 var connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : 'toor',
-	database : 'credentials'
+    host     : 'localhost',
+    user     : 'root',
+    password : 'toor',
+    database : 'credentials'
 });
 
 var app = express();
 app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
 }));
 
 app.use(bodyParser.urlencoded({extended : true}));
@@ -26,31 +29,32 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 app.post('/auth', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
-	if (username && password) {
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-			if (results.length > 0) {
-				request.session.loggedin = true;
-				request.session.username = username;
-				response.redirect('/home');
-			} else {
-				// response.send('Incorrect Username and/or Password!');
-				response.redirect('/login.html'); // main page url
-			}
-			response.end();
-		});
-	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-	}
+    var username = request.body.username;
+    var password = request.body.password;
+    if (username && password) {
+        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+            if (results.length > 0) {
+                request.session.loggedin = true;
+                request.session.username = username;
+                response.redirect('/dashboard.html');
+
+            } else {
+                // response.send('Incorrect Username and/or Password!');
+                response.redirect('/login.html'); // main page url
+            }
+            response.end();
+        });
+    } else {
+        response.send('Please enter Username and Password!');
+        response.end();
+    }
 })
 
 app.post('/signup', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
-	var email = request.body.email;
-	connection.query('SELECT * FROM accounts WHERE username = ?', [username], function(error, results, fields) {
+    var username = request.body.username;
+    var password = request.body.password;
+    var email = request.body.email;
+    connection.query('SELECT * FROM accounts WHERE username = ?', [username], function(error, results, fields) {
         if (results.length > 0) {
             response.send('Username already exist!');
         } else {
@@ -61,16 +65,16 @@ app.post('/signup', function(request, response) {
                 response.send('Account created');
               });
         }
-	})
+    })
 });
 
 app.get('/home', function(request, response) {
-	if (request.session.loggedin) {
-		response.send('Welcome back again, ' + request.session.username + '!');
-	} else {
-		response.send('Please login to view this page!');
-	}
-	response.end();
+    if (request.session.loggedin) {
+        response.send('Welcome back again, ' + request.session.username + '!');
+    } else {
+        response.send('Please login to view this page!');
+    }
+    response.end();
 });
 
 app.listen(3000);
