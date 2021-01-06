@@ -4,8 +4,17 @@
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
 </head>
 <body>
+<script>
+var socket = io.connect('127.0.0.1:3000')
+socket.emit('dashboard')
+socket.on('message', function(){
+    console.log("hello")
+})
+
+</script>
 <div class="login-form">
     <h1>Login Form</h1>
     <form action="auth" method="POST">

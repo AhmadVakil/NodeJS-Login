@@ -3,10 +3,24 @@ var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
-var io  = require('socket.io').listen(5001)
-io.sockets.on('connection', function(socket){
-    console.log("Connected")
-})
+var app = express();
+
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.json());
+app.use(express.static("public"));
+var http = require('http').Server(app);
+http.listen(3000, () => console.error('listening on http://localhost:3000/'));
+var io = require('socket.io')(http,{ transports: ['websocket', 'polling', 'flashsocket'] });
+
+app.get('/', function(request, response) {
+	response.sendFile(path.join(__dirname + '/public/login.html'));
+});
+
 // Change this depend on your db
 var connection = mysql.createConnection({
     host     : 'localhost',
@@ -14,19 +28,6 @@ var connection = mysql.createConnection({
     password : 'toor',
     database : 'credentials'
 });
-
-var app = express();
-app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
-}));
-
-app.use(bodyParser.urlencoded({extended : true}));
-app.use(bodyParser.json());
-
-// Serve public to client & keep server files secure
-app.use(express.static("public"));
 
 app.post('/auth', function(request, response) {
     var username = request.body.username;
@@ -77,4 +78,12 @@ app.get('/home', function(request, response) {
     response.end();
 });
 
-app.listen(3000);
+io.on('connection', s => {
+  console.error('socket.io connection');
+  for (var t = 0; t < 3; t++)
+    setTimeout(() => s.emit('message', 'message from server'), 1000*t);
+  io.on('dashboard', function(){
+    console.log('dashboard')
+  })
+  io.emit('message')
+});

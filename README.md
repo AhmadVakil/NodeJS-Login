@@ -26,7 +26,7 @@ Simple NodeJS authentication example using Express and MySql.
 ```
 \-- credentials
   |-- login.html
-  |-- login.js
+  |-- server.js
 ```
 
 ## Get started
@@ -49,7 +49,7 @@ ALTER TABLE `accounts` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMEN
 ```
 
 Now you can use this command to run the application
-```node login.js```
+```node server.js```
 
 ## In case of errors with database
 Can't make connection? Most common error can related to the db connection. Use the following query to fix it.
