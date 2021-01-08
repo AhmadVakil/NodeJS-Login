@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/login.css">
+</head>
+<body>
+<div class="login-form">
+    <h1>Login Form</h1>
+    <form action="auth" method="POST">
+        <input type="text" name="username" id="userName" placeholder="Username" required>
+        <input type="password" name="password" id ="Password" placeholder="Password" required>
+        <input type="submit" id="loginButton" value="Login">
+    </form>
+
+</div>
+<div id="span">Don't have an account?<br><a href="signup.html">Create an account</a></div>
+
+</body>
+<script src="login.js"></script>
+</html>

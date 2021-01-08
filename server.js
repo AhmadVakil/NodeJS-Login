@@ -1,9 +1,89 @@
-var mysql = require('mysql');
+var express = require('express'),
+  socket = require('socket.io'),
+  mysql = require('mysql'),
+  cookieParser = require('cookie-parser'),
+  session = require('express-session');
+
+  var app = express();
+  var server = app.listen(4000, function () {
+    console.log("listening to port 4000.");
+  });
+  var io = socket.listen(server);
+
+  var sessionMiddleware = session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true
+  });
+
+  io.use(function (socket, next) {
+    sessionMiddleware(socket.request, socket.request.res, next);
+  });
+  app.use(sessionMiddleware);
+  app.use(cookieParser());
+
+  const config = {
+    "host": "localhost",
+    "user": "root",
+    "password": "password",
+    "base": "users"
+  };
+
+  var db = mysql.createConnection({
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.base
+  });
+
+  db.connect(function (error) {
+    if (!!error)
+    throw error;
+
+    console.log('mysql connected to ' + config.host + ", user " + config.user + ", database " + config.base);
+  });
+
+  app.use(express.static('./'));
+
+io.sockets.on('connection', function (socket) {
+    var req = socket.request;
+    socket.on("login_register", function(data){
+      console.log('test')
+    })
+
+   socket.on("login_register", function(data){
+      console.log('login')
+      const user = data.user,
+      pass = data.pass;
+      db.query("SELECT * FROM users WHERE Username=?", [user], function(err, rows, fields){
+          if(rows.length == 0){
+            console.log("nothing here");
+          }else{
+                console.log("here");
+                const dataUser = rows[0].Username,
+                dataPass = rows[0].Password;
+              if(dataPass == null || dataUser == null){
+                socket.emit("error");
+              }
+              if(user == dataUser && pass == dataPass){
+                socket.emit("logged_in", {user: user});
+                req.session.userID = rows[0].id;
+                req.session.save();
+              } else {
+                socket.emit("invalid");
+              }
+          }
+      });
+    });
+  });
+/*var mysql = require('mysql');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
 var app = express();
+var cookieParser = require('cookie-parser'),
+
 
 app.use(session({
     secret: 'secret',
@@ -87,3 +167,4 @@ io.on('connection', s => {
   })
   io.emit('message')
 });
+*/
