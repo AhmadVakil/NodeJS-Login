@@ -25,3 +25,16 @@ li a:hover:not(.active) {
 .active {
   background-color: #4CAF50;
 }
+
+#profilePicture{
+ height:50px;
+ width:50px;
+ background-color:#4caf50;
+}
+
+#username{
+  height:50px;
+}
+#logout{
+  height:50px;
+}
