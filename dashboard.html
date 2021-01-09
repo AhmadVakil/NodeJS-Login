@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta Http-Equiv="Cache-Control" Content="no-cache">
+    <meta Http-Equiv="Pragma" Content="no-cache">
+    <meta Http-Equiv="Expires" Content="0">
+    <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/dashboard.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body>
+<ul>
+    <li><a href="dashboard.html" style="color:yellow;"><strong>Dashboard</strong></a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#contacts">Contacts</a></li>
+    <li style="float:right"><img id="profileImage" src="account.png" style="height:50px; width:50px; background-color:#4caf50;"></li>
+    <li style="float:right"><a class="active" href="" id="username"></a></li>
+    <li style="float:right"><a class="active" href="loggedOut.html" id="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+</ul>
+<script src="dashboard.js"></script>
+</body>
+</html>
