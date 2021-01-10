@@ -9,12 +9,12 @@ $(document).ready(function(){
     });
   });
 });
+socket.on('usernameInvalid', function(){
+        document.getElementById('usernameInvalid').style.display = 'block'
+        document.getElementById('accountCreated').style.display = 'none'
+})
 
-socket.on("logged_in", function(user){
-  //$("#n_log_in").hide();
-  //$("#log_in").html("Welcome back " + name + ", nice to see you again!");
-  //$("#log_in").show();
-  console.log('connected')
-  sessionStorage.setItem('user', user.user);
-  window.location.href = "dashboard.html";
-});
+socket.on('accountCreated', function(){
+        document.getElementById('usernameInvalid').style.display = 'none'
+        document.getElementById('accountCreated').style.display = 'block'
+})

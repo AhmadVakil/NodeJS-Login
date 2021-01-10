@@ -32,6 +32,24 @@
     text-align: center;
 }
 
+#errorSpan{
+    text-align: center;
+    font-size: 15px;
+    color:red;
+}
+#accountCreated{
+    text-align: center;
+    font-size: 15px;
+    color:green;
+}
+#usernameInvalid{
+    text-align: center;
+    font-size: 15px;
+    color:red;
+}
+
+
+
 #button{
     background-color:blue;
     border-radius: 10px;

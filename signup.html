@@ -5,12 +5,15 @@
     <title>Signup</title>
     <link rel="stylesheet" type="text/css" href="public/css/login.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 </head>
 <body>
 <div class="login-form">
     <h1>Signup Form</h1>
     <div>
+        <div id="accountCreated" style="display:none;"><i class="fas fa-user-check"> Account Created.</i></div><br>
+        <div id="usernameInvalid" style="display:none;"><i class="fas fa-exclamation-triangle"> Username is not valid</i></div><br>
         <input type="text" name="username" id="userName" placeholder="Username" required>
         <input type="password" name="password" id="Password" placeholder="Password" required>
         <input type="text" name="email" id="Email" placeholder="Email" required>
