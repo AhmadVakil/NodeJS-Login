@@ -38,12 +38,12 @@ USE `credentials`;
 CREATE TABLE IF NOT EXISTS `account` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` TEXT NOT NULL,
   `email` varchar(100) NOT NULL,
   `picture` TEXT NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `account` (`id`, `username`, `password`, `email`, `picture`) VALUES (1, 'test', 'test', 'test@test.com', 'base64ImageEncodedStringHere');
+INSERT INTO `account` (`id`, `username`, `password`, `email`, `picture`) VALUES (1, 'test', 'hash&Salt&Algorithm&Iteration', 'test@test.com', 'base64ImageEncodedString');
 
 ALTER TABLE `account` ADD PRIMARY KEY (`id`);
 ALTER TABLE `account` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;

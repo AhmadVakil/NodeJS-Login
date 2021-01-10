@@ -4,8 +4,9 @@ var express = require('express'),
   cookieParser = require('cookie-parser'),
   session = require('express-session'),
   bodyParser = require('body-parser'),
-  fs = require('fs');
-  app = express();
+  fs = require('fs'),
+  app = express(),
+  password = require('password-hash-and-salt');
 
 fs.readFile('serverConfig.json', 'utf8', function (err, serverConfig) {
   if (err) throw err;
@@ -30,22 +31,30 @@ fs.readFile('serverConfig.json', 'utf8', function (err, serverConfig) {
     socket.on("login", function(data){
       const user = data.user,
       pass = data.pass;
-      db.query('SELECT * FROM account WHERE username = ? AND password = ?', [user, pass], function(error, rows, fields) {
+      db.query('SELECT * FROM account WHERE username = ?', [user], function(error, rows, fields) {
         if(rows.length == 0){
           socket.emit('incorrectUserPass')
         } else {
           const dataUser = rows[0].username,
           dataPass = rows[0].password;
           if(dataPass === null || dataUser === null){
-            socket.emit("error");
+            socket.emit('incorrectUserPass')
           }
-          if(user === dataUser && pass === dataPass){
-            socket.emit("logged_in", {user: user, pPic: rows[0].picture, userId: rows[0].id});
-            req.session.userID = rows[0].id;
-            req.session.save();
-          } else {
-            socket.emit("invalid");
-          }
+          password(pass).verifyAgainst(dataPass, function(error, verified) {
+            if(error)
+                throw new Error('Something went wrong!');
+            if(verified) {
+                console.log("great");
+            }
+            if(user === dataUser && verified){
+              socket.emit("logged_in", {user: user, pPic: rows[0].picture, userId: rows[0].id});
+              req.session.userID = rows[0].id;
+              req.session.save();
+            } else {
+              socket.emit("invalid");
+              socket.emit('incorrectUserPass')
+            }
+          });
         }
       });
     });
@@ -60,16 +69,22 @@ fs.readFile('serverConfig.json', 'utf8', function (err, serverConfig) {
     })
     socket.on("register", function(data){
       var username = data.user;
-      var password = data.pass;
+      //var password = data.pass;
       var email = data.email;
+      //console.log(typeof password)
       db.query('SELECT * FROM account WHERE username = ?', [username], function(error, results, fields) {
         if (results.length > 0) {
           console.log('usernameInvalid');
           socket.emit('usernameInvalid')
         } else {
-          var sql = 'INSERT INTO account (username, password, email, picture) VALUES ('+mysql.escape(username)+', '+mysql.escape(password)+', '+mysql.escape(email)+', '+mysql.escape(serverConfig.defaultProfilePic)+')';
-          db.query(sql, function (err, result) {
-            socket.emit('accountCreated')
+          password(data.pass).hash(function(error, encryptedPass) {
+            if(error)
+              throw new Error('Hashing Failed!');
+
+            var sql = 'INSERT INTO account (username, password, email, picture) VALUES ('+mysql.escape(username)+', '+mysql.escape(encryptedPass)+', '+mysql.escape(email)+', '+mysql.escape(serverConfig.defaultProfilePic)+')';
+            db.query(sql, function (err, result) {
+              socket.emit('accountCreated')
+            });
           });
         }
       })
