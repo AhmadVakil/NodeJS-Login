@@ -5,11 +5,9 @@ ul {
   overflow: hidden;
   background-color: #333;
 }
-
 li {
   float: left;
 }
-
 li a {
   display: block;
   color: white;
@@ -17,21 +15,17 @@ li a {
   padding: 14px 16px;
   text-decoration: none;
 }
-
 li a:hover:not(.active) {
   background-color: #111;
 }
-
 .active {
   background-color: #4CAF50;
 }
-
 #profilePicture{
- height:50px;
- width:50px;
- background-color:#4caf50;
+  height:50px;
+  width:50px;
+  background-color:#4caf50;
 }
-
 #username{
   height:50px;
 }

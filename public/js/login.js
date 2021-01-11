@@ -3,8 +3,8 @@ $(document).ready(function(){
   $("#loginButton").click(function(){
   console.log('clicked')
     socket.emit("login", {
-        user: $("#userName").val(),
-        pass: $("#Password").val()
+      user: $("#userName").val(),
+      pass: $("#Password").val()
     });
   });
 });
@@ -19,7 +19,7 @@ socket.on("logged_in", function(user){
 });
 
 socket.on("incorrectUserPass", function(){
-    document.getElementById('errorSpan').style.display = 'block'
+  document.getElementById('errorSpan').style.display = 'block'
 })
 socket.on("invalid", function(){
   alert("Username / Password Invalid, Please try again!");
